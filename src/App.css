@@ -1,0 +1,28 @@
+*{
+  scroll-behavior: smooth;
+}
+
+html , body{
+  margin: 0;
+  padding: 0;
+  background-color: #f4eceb;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+} 
+.hideMenuNav {
+  display: none;
+}
+.showMenuNav {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: #F0BFAB;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
