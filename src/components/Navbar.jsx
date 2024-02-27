@@ -1,89 +1,50 @@
 import { useState } from "react";
-import Hamburger from "../assets/hamburger.svg";
-import Cart from "../assets/cart.svg"
-import Logo from "../assets/logo.svg"
-import "../App.css";
+import logo from '../assets/logo.png';
+import account from '../assets/account.png';
+import like from '../assets/like.png';
+import cart from '../assets/cart.png';
+import  Searchimg from "../assets/search.png";
+
+
+
 
 export default function Navbar() {
-  const [isNavOpen, setIsNavOpen] = useState(false);
+
 
   return (
-    <nav>
-      <section className="MOBILE-MENU flex justify-between items-center p-4 md:hidden  shadow-md mb-4">
-        <div>
-        <img  src={Logo} alt="logo" className="w-36 h-16"/>
-        </div>
-        <div className="flex gap-3">
-        <div
-          className="HAMBURGER-ICON space-y-2"
-          onClick={() => setIsNavOpen((prev) => !prev)}
-        >
-          <img src={Hamburger} alt="menu" className="cursor-pointer" />
-        </div>
-        <img src={Cart} alt="cart" className="cursor-pointer" />
-        </div>
-      
-        <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
-          <div >
-            <img  src={Logo} alt="logo" className="w-36 h-16 cursor-pointer  absolute top-0 left-1 px-8 py-8 "/>
-          </div>
-          <div
-            className="CROSS-ICON absolute top-0 right-0 px-8 py-8"
-            onClick={() => setIsNavOpen(false)}
-          >
-            <svg
-              className="h-5 w-5  cursor-pointer"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </div>
-
-          <ul className="MENU-LINK-MOBILE-OPEN flex flex-col  justify-between min-h-[250px] absolute top-20 left-4">
-            <li className=" my-8 ">Home</li>
-
-            <li
-              className=" my-8"
-              onClick={() => setIsNavOpen(!isNavOpen)}
-            >
-              <a href="#resources"> Shop </a>
-            </li>
-            <li
-              className=" my-8  "
-              onClick={() => setIsNavOpen(!isNavOpen)}
-            >
-              <a href="#aboutus"> Categories </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="w-full shadow-md">
-      <div className=" DESKTOP-MENU hidden space-x-8 md:flex   justify-between mx-auto items-center px-6  w-11/12  mb-4">
-        <div>
-        <img  src={Logo} alt="logo" className="w-36 h-16"/>
-        </div>
-        <ul className="flex justify-between w-2/4 ">
-          <li className=" my-8  text-black">Home</li>
-
-          <li className=" my-8  text-black">
-            <a href="#resources"> Shop </a>
-          </li>
-          <li className=" my-8  text-black">
-            <a href="#aboutus"> Categories </a>
-          </li>
-          <li className=" my-8  text-black">About us</li>     
-        <li>  <img src={Cart} alt="cart" className=" my-8  text-black cursor-pointer" /></li> 
-
-        </ul>
+    <nav className=" ">
+      <div className="flex items-center p-1 justify-between bg-bgColor h-100 px-4 py-2 " > 
+      <div className=" flex items-center gap-2 ">
+      <img src={logo} className="w-14 h-14 " alt="" />
+      <p className="text-cute text-lg  font-bold ">Cute Tiny Toe</p>
+      </div>
+      <div className="sm:hidden">
+      {/* <img src={Searchimg} className=" bg-cute rounded-2xl p-2 absolute top-6 left-72" alt="" /> */}
+        <input  className="w-465 h-8 rounded-3xl p-3 text-sm " type="text" placeholder="Search our store" />
+     
+      </div>
+      <div className="flex gap-3 p-2 " >
+        <p className="text-cute text-sm sm:hidden">Account</p>
+        <img src={account} className="w-5 h-5" alt="" />
+        <img src={like} className="w-5 h-5" alt="" />
+        <img src={cart} className="w-5 h-5" alt="" />
       </div>
       </div>
+
+      <div className="flex bg-black text-white text-sm md:justify-center font-bold gap-3 p-2 h-10  md-justify-center overflow-x-auto overflow-y-auto whitespace-nowrap">
+  <div><p>Baby Girls</p></div>
+  <div><p>Baby Boys</p></div>
+  <div><p>Baby UniSex</p></div>
+  <div><p>New Born</p></div>
+  <div><p>Foot Wear</p></div>
+  <div><p>Accessories</p></div>
+  <div><p>Nursery</p></div>
+  <div><p>Feeding</p></div>
+  <div><p className="text-red-400">All clothing</p></div>
+</div>
+
+
     </nav>
+ 
   );
 }
