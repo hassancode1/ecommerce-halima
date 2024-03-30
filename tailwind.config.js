@@ -9,28 +9,46 @@ export default {
       colors: {
         activeColor:"#F0BFAB",
         bgColor:"#EAE2DF",
-        cute:"#A77866"
+        cute:"#A77866",
+        footerLight:'#EAE2DF',
+        input:'#F0F1F2',
+        footerDark:'#262020',
+        Allright:'#9A9EA6',
+        Desc:'#9F9F9F',
+        star:'#FFC700',
+        increment:'#F3F3F8',
+        Cart:'#AAAAAA',
+
+       
       },
       height: {
         '40':'40px',
         '507':'507px',
-        '499':'499px',
-        
+        '44':'44px',
+        '281':'281px',
+        '400':'400px',
+        '370':'370px',
+        '319':'319px',
+        '395':'395px',
+        '80':'80px',
       },
       width:{
-        '465':'465px',
-        '868':'868px',
+        '510':'510px',
+        '530':'530px',
         '412':'412px',
+        '868':'868px',
+        '280':'280px',
+        '390':'390px',
+        '680':'680px',
+        '285':'285px',
+        '200':'200px',
+        '460':'460px',
+        '715':'715px',
+        '230':'230px',
       },
-         
-      // top:{
-      //   '24':'24px',
-      // },
-      // left:{
-      //   '17':'17rem'
-      // },
       
-      screens: {
+        screens: {
+   
         'sm': {'max': '800px'},
         // => @media (min-width: 640px and max-width: 767px) { ... }
   
@@ -40,7 +58,7 @@ export default {
         'lg': {'min': '1024px', 'max': '1279px'},
         // => @media (min-width: 1024px and max-width: 1279px) { ... }
   
-        'xl': {'max': '600px'},
+        'xl': {'min': '800px'},
         // => @media (min-width: 1280px and max-width: 1535px) { ... }
   
         '2xl': {'min': '1536px'},
