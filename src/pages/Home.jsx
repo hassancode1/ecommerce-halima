@@ -12,36 +12,44 @@ import footwear from '../assets/footwear.png';
 import nursery from '../assets/nursery.png';
 import newborn from '../assets/Newborn.png';
 import feeding from '../assets/feeding.png';
-import best1 from  '../assets/best1.png';
-import supabase from '../../supabase';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import { useState, useEffect  } from 'react';
+import useProductget from '../../Hooks/useProductget';
+import { useParams } from 'react-router-dom';
+import { ColorRing} from 'react-loader-spinner'
+import likeCart from '.././assets/likeCart.png';
+import { Helmet } from 'react-helmet';
 const Home = () => {
   
+  const { id: ProductId } = useParams();
   const [Loading, setLoading]= useState(true)
   const [Featured, setFeatured]=useState([])
-
+  const {product} = useProductget('id', ProductId)
   const imageFileUrl = `https://xwsfeqsmtvzdcxhmlvig.supabase.co/storage/v1/object/public/images/`;
-  useEffect(() => {
-    async function fetchProductData() {
-      try {
-        const { data, error } = await supabase.from('Product').select('*');
-        if (error) {
-          console.error('Error fetching data:', error.message);
-          return;
-        }
-        setFeatured(data || []); // Ensure that data is an array
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-      }
-    }
-    fetchProductData();
-  }, []);
-  // const handleDesc= () =>{
-  //  navigate('/Description')
-  // }
   
+  useEffect(() => {
+    setLoading(product.length === 0);
+}, [product]);
+if(Loading){
+  return(
+ 
+<div className='flex items-center justify-center'>
+
+<Helmet><title>Cute Tiny Toe Home</title>  </Helmet>
+
+    <ColorRing
+  height="80"
+  width="80"
+  color="#A77866"
+  ariaLabel="circles-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+       />
+     </div>
+  )
+}
+ 
 const categories = [babygirl, babyboy, uniSex, access, footwear, nursery, newborn, feeding]
 const titles = ['baby girl', 'baby boy', 'unisex', 'Accessories', 'footwear', 'Nursery', 'New born', 'Feeding']
   return (    
@@ -74,9 +82,9 @@ const titles = ['baby girl', 'baby boy', 'unisex', 'Accessories', 'footwear', 'N
   <div className=' flex flex-col mt-12'>
     <h1 className='text-center mb-6  text-xl text-bold'>Shop Category</h1>
     <div className='flex justify-center items-center flex-wrap  gap-5'>
-    {categories.map((category, index) =>(
+    {categories.map((cat, index) =>(
    <div className="  ">
-   <img src={category} alt={titles[index]} className=" mb-2" />
+   <img src={cat} alt={titles[index]} className="w-[4rem] mb-2" />
    <p className='text-sm text-center'>{titles[index]}</p>
  </div>
     ))}
@@ -85,27 +93,27 @@ const titles = ['baby girl', 'baby boy', 'unisex', 'Accessories', 'footwear', 'N
 
 
 {/* Best seller */}
-<div className='mt-12' onClick={handleDesc}>
+<div className='mt-12'>
   <h1 className='text-center mb-6  text-xl text-bold'> Featured Product</h1>
   <div className='flex gap-5 items-center justify-center flex-wrap'>
-  {Featured.map((data) => (
-     <div className=''>
-          {data.images &&
-                    JSON.parse(data.images)?.map((url, index) => (
-                      <img
-                        key={index}
-                        className='w-[230px] rounded-xl shadow-md'
-                        src={imageFileUrl + url}
-                        alt=''
-                      />
-                    ))}
-    <p className='text-sm text-center mt-1'>{data.name}</p>
-    <p className='text-sm text-center mt-1'>₦{data.price}</p>
-    <button className='bg-cute text-white py-2 text-sm w-200 mt-2 rounded-md'>Add to cart</button>
+  {product.map((data) => (
+   
+  <div className='' >
+          <div key={data.id}>
+          <Link to={`/Description/${data.id}`} className='relative'>
+  <div className='relative'>
+    <img className='rounded-xl shadow-md mr-[140]' src={imageFileUrl + JSON.parse(data?.images)[0]} alt='' />
+    <img src={likeCart} className='absolute top-[20rem] right-[2rem] w-[2.5rem] h-[2.5rem]' alt='' />
+  </div>
+  <p className='text-[15px] text-center mt-1'>{data.name}</p>
+  <p className='text-[1rem] text-gray-500 text-center mt-1'>₦{data.price}</p>
+</Link>
+
+        </div>
+   
   </div>
 ))}
 
-    
   </div>
 </div>
 

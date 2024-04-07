@@ -5,10 +5,12 @@ import like from '../assets/like.png';
 import cart from '../assets/cart.png';
 import { NavLink, Link } from 'react-router-dom';
 import supabase from '../../supabase';
-
+import { ShoppingcartContext } from "../../Hooks/ShoppingCartContext";
+import { useContext } from 'react';
 
 export default function Navbar() {
   const [navData, setNavData] = useState([]);
+  const { cartitems} = useContext(ShoppingcartContext);
 
   useEffect(() => {
     async function fetchData() {
@@ -36,20 +38,28 @@ export default function Navbar() {
       <div className="flex items-center justify-between bg-bgColor h-80 px-4 py-2">
         <div className="flex items-center gap-2">
           <img src={logo} className="w-14 h-14" alt="" />
-          <p className="text-cute text-lg font-bold">Cute Tiny Toe</p>
+          <p className="text-cute text-md font-bold">Cute Tiny Toe</p>
         </div>
         <div className="sm:hidden">
           <input className="w-460 h-8 rounded-3xl p-3 text-sm" type="text" placeholder="Search our store" />
         </div>
         <div className="flex gap-3 p-2">
-          <p className="text-cute text-sm sm:hidden">Account</p>
-          <img src={account} className="w-5 h-5" alt="" />
-          <img src={like} className="w-5 h-5" alt="" />
-          <Link to='/Cart'><img src={cart} className="w-5 h-5" alt="" /></Link>
+          <p className="text-cute text-md sm:hidden">Account</p>
+          <img src={account} className="w-6 h-6" alt="" />
+          <img src={like} className="w-6 h-6" alt="" />
+          <div>
+          <Link to='/Cart'><img src={cart} className="w-6 h-6" alt="" /></Link>
+          <span className="bg-red-500 text-white rounded-full px-2 py-1 text-[9px] absolute top-[14px] right-[16px]">
+           {cartitems.reduce((total, item) => total + item.Qty, 0)}
+           </span>
+
+
+
+          </div>
         </div>
       </div>
-      <div className="flex bg-black text-white text-sm justify-center h-15 font-bold gap-3 p-2 overflow-x-auto whitespace-nowrap">
-        <div className="flex flex-nowrap">
+      <div className="flex bg-black text-white text-sm justify-center h-15 font-bold gap-2 p-2 overflow-x-auto whitespace-nowrap">
+        <div className="flex flex-row gap-1 overflow-y-auto">
           
         {Array.isArray(navData) && navData.map((nav) => (
           <NavLink
@@ -66,12 +76,12 @@ export default function Navbar() {
       {nav.name}
       </NavLink>
        ))}
-
-        </div>
-
-        <div className="flex items-stretch">
+<div className="flex items-stretch">
           <NavLink to='/product' className="text-red-400 hover:bg-white hover:text-red-400 p-2">All clothing</NavLink>
         </div> 
+        </div>
+
+        
       </div>
     </nav>
   );
