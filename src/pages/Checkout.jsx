@@ -1,19 +1,22 @@
-import React, { useEffect , useContext} from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import logo from '../assets/logo.png';
 import TextField from '@mui/material/TextField';
 import {PaystackButton} from 'react-paystack';
 import { Link } from 'react-router-dom';
-import {useState,  } from 'react';
 import { toast } from "react-toastify";
 import userOrder from '../../Hooks/userOrder'
 import * as Yup from "yup";
 import {ShoppingcartContext} from '../../Hooks/ShoppingCartContext';
+import useProductget from '../../Hooks/useProductget';
+import supabase from '../../supabase';
+import emailjs from '@emailjs/browser';
 
 
 const Checkout = () => {
-
-const [values, setValues]= useState({
+    
+    const formRef = useRef(null);
+    const [values, setValues]= useState({
     email:"",
     firstName:"",
     lastName:"",
@@ -23,32 +26,67 @@ const [values, setValues]= useState({
     phoneNo:""
 })
     
-    const {  cartitems , calculateTotal} = useContext(ShoppingcartContext);
+    const {  cartitems , calculateTotal, clearCart} = useContext(ShoppingcartContext);
+    const {product} = useProductget()
+
 
 const { postData } = userOrder(); 
   
 const config = {
     reference: new Date().getTime(),
-    metadata: {
-        product:"hassan",
-        },
     email: values.email,
-    amount: calculateTotal() * 10, // Amount in kobo
-    publicKey: 'pk_test_7a41bb409f07b60742bb20278181e4dba1edcd24'
+    amount: calculateTotal() * 10, 
+    // publicKey: 'pk_test_7a41bb409f07b60742bb20278181e4dba1edcd24',
+    publicKey: 'D9HbauZQm0m8KmNTV',
 };
+const updateProductQuantitiy = async ()=>{
+for(let i = 0 ; i < cartitems.length ; i++){
+const currentItems = product.find((prod) => prod.id === cartitems[i].id).quantity
 
-const onSuccess = (reference) => {
-    const {firstName, lastName, email,address, city, state, phoneNo}= values
-       postData({email,
-         firstName, lastName, address, city, state, phoneNo, referenceId:reference.reference , 
-         product:JSON.stringify(cartitems),
-         deliveryStatus:false,
-         paymentStatus:"completed",
-         total:calculateTotal()
-        })
+try{
+  const {error} =  await supabase
+    .from('Product')
+    .update({ quantity: currentItems - cartitems[i].Qty })
+    .eq('id', cartitems[i].id);
+
+    if(error){
+    throw error
+    }
+    clearCart()
+
+}catch(err){
+console.log(err)
+}
+}
+
+
+}
+
+const onSuccess = async (reference) => {
+    const { firstName, lastName, email, address, city, state, phoneNo } = values;
+    try {
+        const response = await postData({
+            email,
+            firstName,
+            lastName,
+            address,
+            city,
+            state,
+            phoneNo,
+            referenceId: reference.reference,
+            product: JSON.stringify(cartitems),
+            deliveryStatus: false,
+            paymentStatus: "completed",
+            total: calculateTotal()
+        });
+   
+        toast.success("Payment successful");
+       updateProductQuantitiy()
         
-      toast.success("Payment successful");
-
+    } catch (error) {
+        console.error('Error during onSuccess:', error);
+        toast.error("Error during payment");
+    }
 };
 
 const onClose = () => {
@@ -57,7 +95,7 @@ const onClose = () => {
 const componentProps = {
     ...config,
     text: 'purchase',
-    onSuccess: onSuccess, 
+    onSuccess: (reference) => {onSuccess(reference)}, 
     onClose: onClose, 
    
 };
@@ -80,12 +118,14 @@ const componentProps = {
      .required("Phone Number is Required"),
  });
 
+
+
  const handleSubmit = async (e) => {
+
     e.preventDefault();
         try {
         await validationSchema.validate(values, { abortEarly: false });
         console.log("Form Submitted", values);
-        // Clear any previous errors
         setErrors({});
 
     } catch (error) {
@@ -103,9 +143,32 @@ const componentProps = {
      setValues({ ...values, [e.target.name]: e.target.value });
  }
 
+ 
+ const sendEmail = async (e) => {
+    e.preventDefault();
+    
+    const cartItemsString = JSON.stringify(cartitems);
+    try {
+        const response = await emailjs.sendForm(
+            "service_br4pswp",
+            "template_veysl5g",
+    
+            formRef.current,
+            {
+                publicKey: 'D9HbauZQm0m8KmNTV',
+                cartItems: cartItemsString  // Pass cart items data as a variable
+            }
+        );
+        console.log('Email sent:', response.data);
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
+
     return (
-        <form onSubmit={handleSubmit}>
-        <div className="">
+        <form ref={formRef} onSubmit={handleSubmit}>
+           <div className="">
         <header className='h-[100px] bg-footerLight flex items-center justify-center gap-5'>
                     <img src={logo} alt="" />
                     <p className="text-cute text-lg font-bold">Cute Tiny Toe</p>
@@ -239,13 +302,13 @@ const componentProps = {
                         <KeyboardBackspaceIcon style={{ color: "#A77866" }} />
                         <Link to='/Cart'><p className='text-cute text-sm'>Back to cart</p> </Link>
                     </div>
-                    { Object.values(values).every(val => val !== '') && Object.keys(errors).length === 0 ? (
+                    {/* { Object.values(values).every(val => val !== '') && Object.keys(errors).length === 0 ? (
                         <PaystackButton className='bg-cute text-white py-2 text-sm w-[200px] sm:w-full mt-2 rounded-md mb-2' {...componentProps} />
-                    ) : (
-                        <button type="submit" className='bg-cute text-white py-2 text-sm w-[200px] sm:w-full mt-2 rounded-md mb-2'>
+                    ) : ( */}
+                        <button  onClick={sendEmail} className='bg-cute text-white py-2 text-sm w-[200px] sm:w-full mt-2 rounded-md mb-2'>
                             Check out
                         </button>
-                    )}
+                    {/* )} */}
                 </div>
 
             </section>

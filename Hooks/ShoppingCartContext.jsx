@@ -13,7 +13,7 @@ function ShoppingCartContext(props) {
     localStorage.setItem("cartitems", JSON.stringify(cartitems));
   }, [cartitems]);
 
-  console.log(cartitems)
+
 
   const handleAddProduct = (product) => {
     const productExit = cartitems.find((item) => item.id === product.id);
@@ -83,7 +83,10 @@ function ShoppingCartContext(props) {
       0
     );
   };
-
+  const clearCart = ()=>{
+setCartitems([])
+  }
+ 
   const value = {
     handleAddProduct,
     cartitems,
@@ -93,6 +96,7 @@ function ShoppingCartContext(props) {
     setQty,
     calculateTotal,
     setCartitems,
+clearCart
   
   };
   return (

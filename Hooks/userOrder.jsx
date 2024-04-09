@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const useOrder = () =>{
   const navigate = useNavigate()
   async function postData(orderData) {
-    const { data, error } = await supabase.from('Order').upsert(orderData);
+    const { data, error } = await supabase.from('Order').insert(orderData);
   
     if (error) {
       console.error('Error posting data:', error);

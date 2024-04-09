@@ -67,7 +67,7 @@ const titles = ['baby girl', 'baby boy', 'unisex', 'Accessories', 'footwear', 'N
 
     <img className='sm:hidden w-280 h-370' src={home2} alt="" />
   </div>
-  <div className='flex items-center justify-center h-370 sm:w-full mt-8 '>
+  <div className='flex items-center justify-center h-370 sm:w-full mt-[3px] '>
   <div className='bg-cute  xl:w-530 h-370 sm:w-full p-10 '>
               <h1 className='text-white text-3xl mt-2'>Tiny Toes, Big Smiles</h1>
               <p className='text-bgColor text-sm mt-2'> Shop Adorable Essentials for Your Precious Ones <br />that are gentle on delicate skin and big on <br />cuteness.</p>
